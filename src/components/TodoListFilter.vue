@@ -1,18 +1,32 @@
 <template>
   <div class="todo-list-filter-wrapper clearfix">
-    <div class="todo-list-categories col-md-6 float-left">
+    <div class="todo-list-categories col-sm-12 col-md-6 float-left">
       <button
-        class="btn btn-light"
+        class="btn"
         v-for="(cat, index) in categories"
         v-bind:key="index"
+        v-on:click="applyFilter($event);"
+        v-bind:class="{
+          'btn-primary': cat.status === 'active',
+          'btn-light': cat.status === 'inactive'
+        }"
       >
         {{ cat.name }}
       </button>
     </div>
-    <div class="todo-list-filters col-md-6 float-right text-right">
-      <button class="btn btn-light">Active</button>
-      <button class="btn btn-light">Done</button>
-      <button class="btn btn-light">Removed</button>
+    <div class="todo-list-filters col-sm-12 col-md-6 float-right text-right">
+      <button
+        class="btn"
+        v-on:click="applyFilter($event);"
+        v-bind:class="{
+          'btn-primary': filter.status === 'active',
+          'btn-light': filter.status === 'inactive'
+        }"
+        v-for="(filter, index) in filters"
+        v-bind:key="index"
+      >
+        {{ filter.name }}
+      </button>
     </div>
   </div>
 </template>
@@ -23,12 +37,22 @@ export default {
   data: function() {
     return {
       categories: [
-        { id: 1, name: "cat1" },
-        { id: 2, name: "cat2" },
-        { id: 3, name: "cat3" },
-        { id: 4, name: "cat4" }
+        { id: 1, name: "cat1", status: "active" },
+        { id: 2, name: "cat2", status: "active" },
+        { id: 3, name: "cat3", status: "active" },
+        { id: 4, name: "cat4", status: "active" }
+      ],
+      filters: [
+        { id: 1, name: "To Do", status: "active" },
+        { id: 2, name: "Done", status: "inactive" },
+        { id: 3, name: "Removed", status: "inactive" }
       ]
     };
+  },
+  methods: {
+    applyFilter: function(e) {
+      this.isActive = !this.isActive;
+    }
   }
 };
 </script>
