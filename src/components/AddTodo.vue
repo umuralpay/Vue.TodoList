@@ -1,14 +1,24 @@
 <template>
   <form class="row d-block">
-    <div class="form-group col-md-6 clearfix">
-      <div class="float-left col-md-5">
-        <input type="text" class="form-control" placeholder="Add New Todo" />
-      </div>
-      <div class="float-left col-md-4">
-        <add-todo-category></add-todo-category>
+    <div class="form-group col-md-12 clearfix">
+      <div class="float-left col-md-7">
+        <input
+          type="text"
+          class="form-control"
+          v-model="todoName"
+          placeholder="Add New Todo"
+        />
       </div>
       <div class="float-left col-md-3">
-        <button class="btn btn-primary">Add New</button>
+        <add-todo-category v-model="selectedCategory"></add-todo-category>
+      </div>
+      <div class="float-left col-md-2">
+        <button
+          class="btn btn-primary btn-block"
+          v-on:click.prevent="addTodo();"
+        >
+          Add New
+        </button>
       </div>
     </div>
   </form>
@@ -20,11 +30,20 @@ export default {
   name: "add-todo",
   data: function() {
     return {
-      selam: ""
+      todoName: "",
+      selectedCategory: ""
     };
   },
   components: {
     AddTodoCategory
+  },
+  methods: {
+    addTodo: function() {
+      this.$root.$emit("todoAdded", {
+        name: this.todoName,
+        selectedCategory: this.selectedCategory
+      });
+    }
   }
 };
 </script>

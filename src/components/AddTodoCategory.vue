@@ -1,17 +1,40 @@
 <template>
-  <select class="form-control">
-    <option v-for="cat in categories">{{ cat }}</option>
+  <select
+    v-model="selectedCategory"
+    class="form-control"
+    v-on:change="categoryChanged();"
+  >
+    <option value="" disabled>-- Please Select --</option>
+    <option
+      v-for="cat in categories"
+      v-bind:value="cat.name"
+      v-bind:key="cat.id"
+      >{{ cat.name }}</option
+    >
   </select>
 </template>
 
 <script>
 export default {
   name: "add-todo-category",
+  props: ["value"],
   data: function() {
     return {
-      categories: ["cat1", "cat2", "cat3", "cat4"]
+      selectedCategory: "",
+      categories: [
+        { id: 1, name: "cat1", isActive: true },
+        { id: 2, name: "cat2", isActive: true },
+        { id: 3, name: "cat3", isActive: true },
+        { id: 4, name: "cat4", isActive: true }
+      ]
     };
-  }
+  },
+  methods: {
+    categoryChanged: function() {
+      this.$emit("input", { name: this.selectedCategory });
+    }
+  },
+  mounted: function() {}
 };
 </script>
 
