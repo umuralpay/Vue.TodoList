@@ -50,9 +50,7 @@ export default {
     };
   },
   methods: {
-    applyFilter: function(e) {
-      console.log(e);
-    }
+    applyFilter: function(e) {}
   }
 };
 </script>

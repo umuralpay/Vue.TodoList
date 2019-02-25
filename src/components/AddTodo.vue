@@ -16,6 +16,7 @@
         <button
           class="btn btn-primary btn-block"
           v-on:click.prevent="addTodo();"
+          v-bind:disabled="!isValid"
         >
           Add New
         </button>
@@ -30,6 +31,10 @@ export default {
   name: "add-todo",
   data: function() {
     return {
+      formElemsValid: {
+        todoName: false,
+        selectedCategory: false
+      },
       todoName: "",
       selectedCategory: ""
     };
@@ -37,12 +42,28 @@ export default {
   components: {
     AddTodoCategory
   },
+  computed: {
+    isValid: function() {
+      return (
+        this.formElemsValid.todoName && this.formElemsValid.selectedCategory
+      );
+    }
+  },
   methods: {
+    checkForm: function() {},
     addTodo: function() {
       this.$root.$emit("todoAdded", {
         name: this.todoName,
         selectedCategory: this.selectedCategory
       });
+    }
+  },
+  watch: {
+    todoName: function(n, o) {
+      this.formElemsValid.todoName = n === "" ? false : true;
+    },
+    selectedCategory: function(n, o) {
+      this.formElemsValid.selectedCategory = n === undefined ? false : true;
     }
   }
 };
