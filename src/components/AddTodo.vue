@@ -60,7 +60,6 @@ export default {
         category: this.selectedCategory.name
       });
       this.todoName = "";
-      this.selectedCategory = "";
     }
   },
   watch: {

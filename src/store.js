@@ -25,6 +25,7 @@ const store = new Vuex.Store({
       state.visibleTodos = payload;
     },
     filterTodos(state) {
+      console.log(state);
       state.visibleTodos =
         state.filters.length > 0
           ? state.todos.filter(todo => {
