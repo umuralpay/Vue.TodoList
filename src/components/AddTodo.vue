@@ -1,7 +1,7 @@
 <template>
   <form class="row d-block">
     <div class="form-group col-md-12 clearfix">
-      <div class="float-left col-md-7">
+      <div class="float-left col-lg-7 col-md-5">
         <input
           type="text"
           class="form-control"
@@ -9,10 +9,10 @@
           placeholder="Add New Todo"
         />
       </div>
-      <div class="float-left col-md-3">
+      <div class="float-left col-lg-3 col-md-4">
         <add-todo-category v-model="selectedCategory"></add-todo-category>
       </div>
-      <div class="float-left col-md-2">
+      <div class="float-left col-lg-2 col-md-3">
         <button
           class="btn btn-primary btn-block"
           v-on:click.prevent="addTodo();"
@@ -52,10 +52,15 @@ export default {
   methods: {
     checkForm: function() {},
     addTodo: function() {
-      this.$root.$emit("todoAdded", {
+      let id = this.$store.getters.getNextTodoId;
+      this.$store.dispatch("addTodo", {
+        id: id,
         name: this.todoName,
-        selectedCategory: this.selectedCategory
+        status: "todo",
+        category: this.selectedCategory.name
       });
+      this.todoName = "";
+      this.selectedCategory = "";
     }
   },
   watch: {

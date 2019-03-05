@@ -4,7 +4,7 @@
     class="form-control"
     v-on:change="categoryChanged();"
   >
-    <option value="" disabled>-- Please Select --</option>
+    <option value="">-- Please Select --</option>
     <option
       v-for="cat in categories"
       v-bind:value="cat.name"
@@ -32,9 +32,11 @@ export default {
   methods: {
     categoryChanged: function() {
       this.$emit("input", { name: this.selectedCategory });
+    },
+    clearSelection: function() {
+      this.selectedCategory = "";
     }
-  },
-  mounted: function() {}
+  }
 };
 </script>
 
