@@ -6,8 +6,17 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     todos: [],
-    category: [],
-    filter: [],
+    categories: [
+      { id: 1, name: 'cat1', isActive: false },
+      { id: 2, name: 'cat2', isActive: false },
+      { id: 3, name: 'cat3', isActive: false },
+      { id: 4, name: 'cat4', isActive: false }
+    ],
+    filters: [
+      { id: 1, name: 'todo', isActive: false },
+      { id: 2, name: 'done', isActive: false },
+      { id: 3, name: 'removed', isActive: false }
+    ],
     visibleTodos: []
   },
   mutations: {
@@ -17,44 +26,38 @@ const store = new Vuex.Store({
     setFilter(state, payload) {
       let type = state[payload[1]];
       let item = payload[0];
-      if (type.indexOf(item) > -1) {
-        type.splice(type.indexOf(item), 1);
-      } else {
-        type.push(item);
-      }
+      let index = type.findIndex(x => x.name === item);
+      type[index].isActive = !type[index].isActive;
     },
     setTodos(state, payload) {
       state.todos = payload;
       state.visibleTodos = payload;
     },
     filterTodos(state) {
-      let f = state.filter;
-      let c = state.category;
-      let t = state.todos;
-      if (f.length > 0 || c.length > 0) {
-        if (c.length) {
-          let temp = t.filter(todo => {
-            if (c.indexOf(todo.category) > -1) {
-              return true;
-            }
-            return false;
-          });
-          t = temp;
-        }
-
-        if (f.length) {
-          let temp = t.filter(todo => {
-            if (f.indexOf(todo.status) > -1) {
-              return true;
-            }
-            return false;
-          });
-
-          t = temp;
-        }
+      let activeFilters = state.filters.filter(i => i.isActive === true);
+      let activeCategories = state.categories.filter(i => i.isActive === true);
+      let remainingTodoList = state.todos;
+      if (activeCategories.length) {
+        let temp = remainingTodoList.filter(todo => {
+          if (activeCategories.find(x => x.name === todo.category)) {
+            return true;
+          }
+          return false;
+        });
+        remainingTodoList = temp;
       }
 
-      state.visibleTodos = t;
+      if (activeFilters.length) {
+        let temp = remainingTodoList.filter(todo => {
+          if (activeFilters.find(x => x.name === todo.status)) {
+            return true;
+          }
+          return false;
+        });
+
+        remainingTodoList = temp;
+      }
+      state.visibleTodos = remainingTodoList;
     }
   },
   actions: {
@@ -80,6 +83,12 @@ const store = new Vuex.Store({
       return state.todos.length > 0
         ? state.todos[state.todos.length - 1].id + 1
         : 0;
+    },
+    getCategories: state => {
+      return state.categories;
+    },
+    getFilters: state => {
+      return state.filters;
     }
   }
 });

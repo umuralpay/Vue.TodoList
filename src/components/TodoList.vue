@@ -26,16 +26,11 @@
 </template>
 
 <script>
-import Vue from "vue";
-import TodoListFilter from "./TodoListFilter.vue";
+import Vue from 'vue';
+import TodoListFilter from './TodoListFilter.vue';
 
 export default {
-  name: "todo-list",
-  data: function() {
-    return {
-      todos: []
-    };
-  },
+  name: 'todo-list',
   components: {
     TodoListFilter
   },
