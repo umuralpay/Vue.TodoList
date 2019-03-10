@@ -5,7 +5,7 @@
         class="btn"
         v-for="(cat, index) in categories"
         v-bind:key="index"
-        v-on:click="applyFilter(cat);"
+        v-on:click="applyFilter(cat, 'category');"
         v-bind:class="{
           'btn-primary': cat.isActive,
           'btn-light': !cat.isActive
@@ -17,7 +17,7 @@
     <div class="todo-list-filters col-sm-12 col-md-6 float-right text-right">
       <button
         class="btn"
-        v-on:click="applyFilter(filter);"
+        v-on:click="applyFilter(filter, 'filter');"
         v-bind:class="{
           'btn-primary': filter.isActive,
           'btn-light': !filter.isActive
@@ -33,26 +33,26 @@
 
 <script>
 export default {
-  name: "todo-list-filter",
+  name: 'todo-list-filter',
   data: function() {
     return {
       categories: [
-        { id: 1, name: "cat1", isActive: false },
-        { id: 2, name: "cat2", isActive: false },
-        { id: 3, name: "cat3", isActive: false },
-        { id: 4, name: "cat4", isActive: false }
+        { id: 1, name: 'cat1', isActive: false },
+        { id: 2, name: 'cat2', isActive: false },
+        { id: 3, name: 'cat3', isActive: false },
+        { id: 4, name: 'cat4', isActive: false }
       ],
       filters: [
-        { id: 1, name: "todo", isActive: false },
-        { id: 2, name: "done", isActive: false },
-        { id: 3, name: "removed", isActive: false }
+        { id: 1, name: 'todo', isActive: false },
+        { id: 2, name: 'done', isActive: false },
+        { id: 3, name: 'removed', isActive: false }
       ]
     };
   },
   methods: {
-    applyFilter: function(el) {
+    applyFilter: function(el, type) {
       el.isActive = !el.isActive;
-      this.$store.dispatch("setFilter", el.name);
+      this.$store.dispatch('setFilter', [el.name, type]);
     }
   }
 };

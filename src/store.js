@@ -1,12 +1,13 @@
-import Vuex from "vuex";
-import Vue from "vue";
-import axios from "axios";
+import Vuex from 'vuex';
+import Vue from 'vue';
+import axios from 'axios';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
     todos: [],
-    filters: [],
+    category: [],
+    filter: [],
     visibleTodos: []
   },
   mutations: {
@@ -14,10 +15,12 @@ const store = new Vuex.Store({
       state.todos.push(payload);
     },
     setFilter(state, payload) {
-      if (state.filters.indexOf(payload) > -1) {
-        state.filters.splice(state.filters.indexOf(payload), 1);
+      let type = state[payload[1]];
+      let item = payload[0];
+      if (type.indexOf(item) > -1) {
+        type.splice(type.indexOf(item), 1);
       } else {
-        state.filters.push(payload);
+        type.push(item);
       }
     },
     setTodos(state, payload) {
@@ -25,34 +28,48 @@ const store = new Vuex.Store({
       state.visibleTodos = payload;
     },
     filterTodos(state) {
-      console.log(state);
-      state.visibleTodos =
-        state.filters.length > 0
-          ? state.todos.filter(todo => {
-              if (
-                state.filters.indexOf(todo.category) > -1 ||
-                state.filters.indexOf(todo.status) > -1
-              ) {
-                return true;
-              }
-              return false;
-            })
-          : state.todos;
+      let f = state.filter;
+      let c = state.category;
+      let t = state.todos;
+      if (f.length > 0 || c.length > 0) {
+        if (c.length) {
+          let temp = t.filter(todo => {
+            if (c.indexOf(todo.category) > -1) {
+              return true;
+            }
+            return false;
+          });
+          t = temp;
+        }
+
+        if (f.length) {
+          let temp = t.filter(todo => {
+            if (f.indexOf(todo.status) > -1) {
+              return true;
+            }
+            return false;
+          });
+
+          t = temp;
+        }
+      }
+
+      state.visibleTodos = t;
     }
   },
   actions: {
     addTodo(context, payload) {
-      context.commit("addTodo", payload);
-      context.commit("filterTodos");
+      context.commit('addTodo', payload);
+      context.commit('filterTodos');
     },
     getTodos({ commit }) {
-      axios.get("https://www.mocky.io/v2/5c7e2ea5310000770037613e").then(r => {
-        commit("setTodos", r.data);
+      axios.get('https://www.mocky.io/v2/5c7e2ea5310000770037613e').then(r => {
+        commit('setTodos', r.data);
       });
     },
     setFilter(context, payload) {
-      context.commit("setFilter", payload);
-      context.commit("filterTodos");
+      context.commit('setFilter', payload);
+      context.commit('filterTodos');
     }
   },
   getters: {

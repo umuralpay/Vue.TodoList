@@ -25,11 +25,6 @@ import Home from "./components/Home.vue";
 import Todo from "./components/Todo.vue";
 export default {
   name: "app",
-  data: function() {
-    return {
-      breadcrumb: this.$route.params.id
-    };
-  },
   components: {
     Home,
     Todo
@@ -37,9 +32,9 @@ export default {
   mounted() {
     this.$store.dispatch("getTodos");
   },
-  watch: {
-    $route(to, from) {
-      this.breadcrumb = this.$route.params.id;
+  computed: {
+    breadcrumb() {
+      return this.$route.params.id;
     }
   }
 };
